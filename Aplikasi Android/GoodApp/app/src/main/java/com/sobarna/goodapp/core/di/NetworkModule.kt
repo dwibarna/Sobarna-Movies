@@ -3,6 +3,8 @@ package com.sobarna.goodapp.core.di
 import com.sobarna.goodapp.core.data.source.remote.network.ApiService
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,6 +14,7 @@ import java.util.concurrent.TimeUnit
 
 
 @Module
+@InstallIn(SingletonComponent::class)
 class NetworkModule {
 
     @Provides

@@ -8,7 +8,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.sobarna.goodapp.R
 import com.sobarna.goodapp.core.ui.adapter.SectionPagerAdapter
 import com.sobarna.goodapp.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

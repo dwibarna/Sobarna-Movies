@@ -1,38 +1,31 @@
 package com.sobarna.goodapp.view
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.sobarna.goodapp.MyApplication
 import com.sobarna.goodapp.R
 import com.sobarna.goodapp.core.domain.model.Movie
-import com.sobarna.goodapp.core.ui.ViewModelFactory
 import com.sobarna.goodapp.databinding.ActivityDetailBinding
 import com.sobarna.goodapp.viewmodel.DetailViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DATA = "extra_data"
     }
 
-    @Inject
-    lateinit var factory: ViewModelFactory
-
-
-    private val detailViewModel: DetailViewModel by viewModels {
-        factory
-    }
+    private val detailViewModel: DetailViewModel by viewModels()
     private lateinit var binding: ActivityDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
