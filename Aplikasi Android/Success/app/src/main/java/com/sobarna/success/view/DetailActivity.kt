@@ -3,9 +3,10 @@ package com.sobarna.success.view
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.sobarna.success.MyApplication
 import com.sobarna.success.R
 import com.sobarna.success.core.domain.model.Movie
 import com.sobarna.success.core.ui.ViewModelFactory
@@ -13,25 +14,30 @@ import com.sobarna.success.databinding.ActivityDetailBinding
 import com.sobarna.success.viewmodel.DetailViewModel
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 
 class DetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DATA = "extra_data"
     }
+    @Inject
+    lateinit var factory: ViewModelFactory
 
-    private lateinit var detailTourismViewModel: DetailViewModel
+
+    private val detailViewModel: DetailViewModel by viewModels {
+        factory
+    }
     private lateinit var binding: ActivityDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
        // setSupportActionBar(binding.toolbar)
 
-        val factory = ViewModelFactory.getInstance(this)
-        detailTourismViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val detailMovie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
         showDetailTourism(detailMovie)
@@ -74,7 +80,7 @@ class DetailActivity : AppCompatActivity() {
             setStatusFavorite(statusFavorite)
             binding.fabDetail.setOnClickListener {
                statusFavorite = !statusFavorite
-                detailTourismViewModel.setFavoriteTourism(movie, statusFavorite)
+                detailViewModel.setFavoriteTourism(movie, statusFavorite)
                 setStatusFavorite(statusFavorite)
             }
         }

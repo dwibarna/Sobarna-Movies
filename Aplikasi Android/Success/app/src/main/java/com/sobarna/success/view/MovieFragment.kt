@@ -1,5 +1,6 @@
 package com.sobarna.success.view
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,20 +8,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sobarna.success.MyApplication
 import com.sobarna.success.core.data.Resource
 import com.sobarna.success.core.ui.ViewModelFactory
 import com.sobarna.success.core.ui.adapter.MovieAdapter
 import com.sobarna.success.databinding.FragmentMovieBinding
 import com.sobarna.success.viewmodel.HomeViewModel
+import javax.inject.Inject
 
 class MovieFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    @Inject
+    lateinit var factory: ViewModelFactory
+
+    private val homeViewModel: HomeViewModel by viewModels{
+        factory
+    }
 
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().application as MyApplication).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,8 +57,6 @@ class MovieFragment : Fragment() {
                 startActivity(intent)
             }
 
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            homeViewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
             homeViewModel.useCase.observe(viewLifecycleOwner, { movie ->
                 if (movie != null) {

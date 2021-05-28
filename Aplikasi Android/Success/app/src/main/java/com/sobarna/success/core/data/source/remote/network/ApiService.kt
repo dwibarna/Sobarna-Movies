@@ -4,7 +4,7 @@ import com.sobarna.success.BuildConfig
 import com.sobarna.success.core.data.source.remote.response.ListMovieResponse
 import io.reactivex.Flowable
 import retrofit2.http.GET
-//${BuildConfig.KEY}
+
 interface ApiService {
     @GET("3/movie/upcoming?api_key=${BuildConfig.KEY}")
     fun getListMovie(): Flowable<ListMovieResponse>
