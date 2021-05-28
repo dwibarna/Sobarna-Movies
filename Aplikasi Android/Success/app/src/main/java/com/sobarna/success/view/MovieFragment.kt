@@ -9,8 +9,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sobarna.success.core.adapter.MovieAdapter
 import com.sobarna.success.core.data.Resource
-import com.sobarna.success.core.ui.adapter.MovieAdapter
 import com.sobarna.success.databinding.FragmentMovieBinding
 import com.sobarna.success.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,12 +49,12 @@ class MovieFragment : Fragment() {
             homeViewModel.useCase.observe(viewLifecycleOwner, { movie ->
                 if (movie != null) {
                     when (movie) {
-                        is Resource.Loading -> binding.pbMovie.visibility = View.VISIBLE
-                        is Resource.Success -> {
+                        is com.sobarna.success.core.data.Resource.Loading<*> -> binding.pbMovie.visibility = View.VISIBLE
+                        is com.sobarna.success.core.data.Resource.Success<*> -> {
                             binding.pbMovie.visibility = View.GONE
                             movieAdapter.setData(movie.data)
                         }
-                        is Resource.Error -> {
+                        is com.sobarna.success.core.data.Resource.Error<*> -> {
                             binding.pbMovie.visibility = View.GONE
                             Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                         }

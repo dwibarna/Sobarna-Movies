@@ -1,2 +1,3 @@
 rootProject.name = "Success"
 include ':app'
+include ':core'

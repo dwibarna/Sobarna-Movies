@@ -5,8 +5,9 @@ import android.os.Bundle
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.sobarna.success.core.ui.adapter.SectionPagerAdapter
+
 import com.sobarna.success.databinding.ActivityMainBinding
+import com.sobarna.success.view.SectionPagerAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

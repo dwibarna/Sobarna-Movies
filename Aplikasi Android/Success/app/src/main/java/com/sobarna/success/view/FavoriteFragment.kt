@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sobarna.success.core.ui.adapter.MovieAdapter
+import com.sobarna.success.core.adapter.MovieAdapter
 import com.sobarna.success.databinding.FragmentFavoriteBinding
 import com.sobarna.success.viewmodel.FavoriteViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,9 +43,9 @@ class FavoriteFragment : Fragment() {
             }
 
 
-            favoriteViewModel.useCase.observe(viewLifecycleOwner, { dataTourism ->
+            favoriteViewModel.useCase.observe(viewLifecycleOwner) { dataTourism ->
                 movieAdapter.setData(dataTourism)
-            })
+            }
 
             with(binding.rvFavorite) {
                 layoutManager = LinearLayoutManager(context)
