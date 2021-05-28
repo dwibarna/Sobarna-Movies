@@ -4,28 +4,26 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.sobarna.success.core.domain.usecase.MovieUseCase
+import com.sobarna.success.di.AppScope
 import com.sobarna.success.viewmodel.DetailViewModel
 import com.sobarna.success.viewmodel.FavoriteViewModel
 import com.sobarna.success.viewmodel.HomeViewModel
+import java.lang.IllegalArgumentException
 import javax.inject.Inject
-
-class ViewModelFactory @Inject constructor(private val useCase: MovieUseCase) :
-    ViewModelProvider.NewInstanceFactory() {
+import javax.inject.Provider
 
 
-
+@AppScope
+class ViewModelFactory @Inject constructor(
+    private val creators: Map<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
+    ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        when {
-            modelClass.isAssignableFrom(HomeViewModel::class.java) -> {
-                HomeViewModel(useCase) as T
-            }
-            modelClass.isAssignableFrom(FavoriteViewModel::class.java) -> {
-                FavoriteViewModel(useCase) as T
-            }
-            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel(useCase) as T
-            }
-            else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
-        }
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        val creator = creators[modelClass] ?: creators.entries.firstOrNull {
+            modelClass.isAssignableFrom(it.key)
+        }?.value ?: throw IllegalArgumentException("unknown model class $modelClass")
+        return creator.get() as T
+    }
+
+
 }
