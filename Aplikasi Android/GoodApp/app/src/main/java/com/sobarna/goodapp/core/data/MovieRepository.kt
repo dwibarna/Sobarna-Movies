@@ -11,26 +11,18 @@ import com.sobarna.goodapp.core.utils.DataMapper
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MovieRepository private constructor(
+
+@Singleton
+class MovieRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
 ) : IMovieRepository {
 
-    companion object {
-        @Volatile
-        private var instance: MovieRepository? = null
 
-        fun getInstance(
-            remoteData: RemoteDataSource,
-            localData: LocalDataSource,
-            appExecutors: AppExecutors
-        ): MovieRepository =
-            instance ?: synchronized(this) {
-                instance ?: MovieRepository(remoteData, localData, appExecutors)
-            }
-    }
 
     override fun getAllMovies(): Flowable<Resource<List<Movie>>> {
         return object : NetworkBoundResource<List<Movie>,List<MovieResponse>>(){

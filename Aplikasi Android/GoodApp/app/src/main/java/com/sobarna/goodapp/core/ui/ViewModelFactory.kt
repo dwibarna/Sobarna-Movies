@@ -3,26 +3,15 @@ package com.sobarna.goodapp.core.ui
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.sobarna.goodapp.core.di.Injection
 import com.sobarna.goodapp.core.domain.usecase.MovieUseCase
 import com.sobarna.goodapp.viewmodel.DetailViewModel
 import com.sobarna.goodapp.viewmodel.FavoriteViewModel
 import com.sobarna.goodapp.viewmodel.HomeViewModel
+import javax.inject.Inject
 
-class ViewModelFactory private constructor(private val useCase: MovieUseCase) :
+class ViewModelFactory @Inject constructor(private val useCase: MovieUseCase) :
     ViewModelProvider.NewInstanceFactory() {
 
-    companion object {
-        @Volatile
-        private var instance: ViewModelFactory? = null
-
-        fun getInstance(context: Context): ViewModelFactory =
-            instance ?: synchronized(this) {
-                instance ?: ViewModelFactory(
-                    Injection.provideMovieUseCase(context)
-                )
-            }
-    }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T =

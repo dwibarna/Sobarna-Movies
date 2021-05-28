@@ -3,9 +3,10 @@ package com.sobarna.goodapp.view
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.sobarna.goodapp.MyApplication
 import com.sobarna.goodapp.R
 import com.sobarna.goodapp.core.domain.model.Movie
 import com.sobarna.goodapp.core.ui.ViewModelFactory
@@ -13,6 +14,7 @@ import com.sobarna.goodapp.databinding.ActivityDetailBinding
 import com.sobarna.goodapp.viewmodel.DetailViewModel
 import java.text.DateFormat
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 
 class DetailActivity : AppCompatActivity() {
 
@@ -20,18 +22,23 @@ class DetailActivity : AppCompatActivity() {
         const val EXTRA_DATA = "extra_data"
     }
 
-    private lateinit var detailTourismViewModel: DetailViewModel
+    @Inject
+    lateinit var factory: ViewModelFactory
+
+
+    private val detailViewModel: DetailViewModel by viewModels {
+        factory
+    }
     private lateinit var binding: ActivityDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
        // setSupportActionBar(binding.toolbar)
 
-        val factory = ViewModelFactory.getInstance(this)
-        detailTourismViewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
 
         val detailMovie = intent.getParcelableExtra<Movie>(EXTRA_DATA)
         showDetailTourism(detailMovie)
@@ -74,7 +81,7 @@ class DetailActivity : AppCompatActivity() {
             setStatusFavorite(statusFavorite)
             binding.fabDetail.setOnClickListener {
                statusFavorite = !statusFavorite
-                detailTourismViewModel.setFavoriteTourism(movie, statusFavorite)
+                detailViewModel.setFavoriteTourism(movie, statusFavorite)
                 setStatusFavorite(statusFavorite)
             }
         }
